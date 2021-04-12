@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from '../App';
 
 
@@ -17,6 +17,7 @@ test("renders add new task button", () => {
 
 test("fill in the New Task Form", () =>{
   render(<App />)
+  fireEvent.click(screen.getByText(/Add a New Task/))
 
 
 })
