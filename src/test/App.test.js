@@ -1,9 +1,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from '../App';
+import ItemForm from "../components/ItemForm";
+import ItemCard from "../components/ItemCard";
 
 
 
-const item_1 = {
+const item = {
   name: "Item 1",
   content: "This is the first item",
   priority: "High",
@@ -59,6 +61,41 @@ test("change sorting method", async () => {
   await waitFor(() => screen.getByText(/Sort By Name/i))
   expect(screen.getByLabelText(/Sort By Name/i)).toBeChecked()
   expect(screen.getByLabelText(/Sort By Priority/i)).not.toBeChecked()
+})
+
+
+
+test("change field values", async () => {
+  render(<ItemForm {...item} />)
+  // change task name
+  fireEvent.change(screen.getByLabelText(/Task Name/), {
+    target: { value: "Todo Task 1#" }
+  })
+  await waitFor(() => screen.getByLabelText(/Task Name/))
+  expect(screen.getByLabelText(/Task Name/)).toHaveValue("Todo Task 1#")
+
+  // change task content
+  fireEvent.change(screen.getByLabelText(/Task Description/), {
+    target: { value: "This is Todo Task One#" }
+  })
+  await waitFor(() => screen.getByLabelText(/Task Description/))
+  expect(screen.getByLabelText(/Task Description/)).toHaveValue(
+      "This is Todo Task One#"
+  )
+
+// change task priority
+fireEvent.change(screen.getByLabelText(/Priority/), {
+  target: { value: "Medium" }
+})
+await waitFor(() => screen.getByLabelText(/Priority/))
+expect(screen.getByLabelText(/Priority/)).toHaveValue("Medium")
+
+// change completed status
+fireEvent.change(screen.getByLabelText(/Completed/), {
+  target: { checked: true }
+})
+await waitFor(() => screen.getByLabelText(/Completed/))
+expect(screen.getByLabelText(/Completed/)).toBeChecked(true)
 })
 
 
